@@ -2,13 +2,12 @@
 
 ## To clone this repository to your local drive
 
-* To a new directory
+* To a new directory<br>
 git init<br>
 git remote add origin https://github.com/wampeh1/ECOG_314.git<br>
 git pull
 
-* To an existing git folder
-git remote add origin https://github.com/wampeh1/ECOG_314.git<br>
+* To an existing git folder<br>
 git pull
 
 
