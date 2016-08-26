@@ -1,5 +1,17 @@
 # Welcome to ECOG-314
 
+## To clone this repository to your local drive
+
+* To a new directory
+git init
+git remote add origin https://github.com/wampeh1/ECOG_314.git
+git pull
+
+* To an existing git folder
+git remote add origin https://github.com/wampeh1/ECOG_314.git
+git pull
+
+
 ## About this Course
 
 Conducting data and econometric analysis requires not only an understanding of theoretical concepts, but practical knowledge of how to carry out empirical work.  Statistical programming packages are the means by which empirical work is conducted.  In this course, students will learn how to use one such language, R, as a means to building their empirical toolkit.  R has become one of the leading languages in data science and statistics. The program, which is free, t is the tool of choice for data science professionals in academia, research, and industry. R users include full-time number crunchers, data curators, data visualization experts, and occasional data analysts.
