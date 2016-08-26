@@ -94,7 +94,7 @@ Inspect the tabs in the top and bottom right panels or windows in your RStudio s
 * Click on the "Environment" tab and inspect the contents of some of the variables
 * Click on the "History" tab to view the history of the commands entered
 * Click on a line of text (from the History tab), click on "To Console" to insert the text into a new or current script file
-* Select (drag yoour mouse over) 5 or more lines of text (from the History tab), click on "To Source" to send the command to the R Console
+* Select (drag your mouse over) 5 or more lines of text (from the History tab), click on "To Source" to send the command to the R Console
 * You may save the history, clear part or all of your history
 
 <br>
@@ -127,7 +127,7 @@ sqrt()
 ```
 <br>
 
-**Note**: Command completion can beturned on/of through "Tools" -> "Global Options ..." -> "Code" -> "Completeion"
+**Note**: Command completion can be turned on/of through "Tools" -> "Global Options ..." -> "Code" -> "Completion"
 
 Previous command can either be retrieved from the "History" window or by:<p>
 * <b>Up</b>/<b>Down</b> keys recalls previous commands
@@ -148,8 +148,8 @@ Use the **Up**/**Down** keys recalls previous commands, the press **Ctrl-UP** (i
 
 **Keyboard Shortcuts**<p>
 * <b>Ctrl-1</b> Moves cursor to Source Editor window
-* <b>Ctrl-2</b> Moves cursor to the Consule window
-* <b>Ctrl-4</b> Moves cursor to the Consule window
+* <b>Ctrl-2</b> Moves cursor to the Console window
+* <b>Ctrl-4</b> Moves cursor to the Console window
 * <b>Esc</b> Interrupts R
 * Additional list of keyboard shortcuts are listed in <a href="https://support.rstudio.com/hc/en-us/articles/200711853">here</a> 
 
@@ -175,7 +175,7 @@ R functions/operators we will be using
 
 * `<-` and `=`    assignment operator
 * `+`, `-`, `*`, `^`     arithmetic operators
-* `[ ]`          subseting
+* `[ ]`          sub-setting
 * `c()`         create a vector
 * `cbind()`       combine them into a n x 2 matrix
 * `list()`      create an ordered collection of values
@@ -186,7 +186,7 @@ R functions/operators we will be using
 * `seq()`		  	create sequence
 * `tail()`	  	show last few rows of data object
 * `min()`, `max()`, `mean()`, `median()`,  `mode()`  general stats on on object
-* `summary()`   shows a sumary of data object 
+* `summary()`   shows a summary of data object 
 * `typeof()`      displays an object type
 * `class()`       displays the class of an object
 
@@ -279,14 +279,27 @@ getwd()                                      #the current directory accessible t
 
 ```
 
+<hr shadow=NONE>
+
+ 
+
+### R Basic Data Types
+
+Now that are familiar with R, we are going to look at the variable type that can be created in R
+
+<br>
+
+ 
+
+<font color="red">Note</font>: Be mindful when creating variable names. **Symantically valid** variable names will be covered under Homeworks Q4 and Q5 in this lecture.
+
+ 
 
 <hr shadow=NONE>
 
-### R Basic Data Types
-Now that are familar with R, we are going to look at the variable type that can be created in R
-<br>
-Be mindful when creating vari
-#### (1) Vectors of length one (atomic data types)
+
+
+####(1) Vectors of length one (atomic data types)
 
 * **Numeric (integer or double)**
 ```{r }
@@ -546,7 +559,7 @@ summary()
 Homework Q6
 ===========
 
-* Data from washingtom post article  Brigid Schulte, 2013, <a href="https://www.washingtonpost.com/local/2013/09/10/9c72c1d2-1a6c-11e3-8685-5021e0c41964_graphic.html">"__Who U.S.-born children are living with__"</a>, a headline from the following article <a  href="http://www.washingtonpost.com/local/children-suffer-from-growing-economic-inequality-among-families-since-recession/2013/09/10/793423ae-1a4f-11e3-82ef-a059e54c49d0_story.html">"__Children suffer from growing economic inequality among families since recession__"</a>
+* Data from Washington post article  Brigid Schulte, 2013, <a href="https://www.washingtonpost.com/local/2013/09/10/9c72c1d2-1a6c-11e3-8685-5021e0c41964_graphic.html">"__Who U.S.-born children are living with__"</a>, a headline from the following article <a  href="http://www.washingtonpost.com/local/children-suffer-from-growing-economic-inequality-among-families-since-recession/2013/09/10/793423ae-1a4f-11e3-82ef-a059e54c49d0_story.html">"__Children suffer from growing economic inequality among families since recession__"</a>
 
 * Aim is manually input and represent the visualization data in R. W will then learn ways to simplifying appearance later in the course.
 
@@ -565,7 +578,7 @@ sets of values:
 24 53  4  1 12  5
         
         
-Use: `?c` to determine how the 24 values should be formated as arguments to `c()`.  
+Use: `?c` to determine how the 24 values should be formatted as arguments to `c()`.  
 
 Hint: Function arguments are separated by commas. 
 
@@ -574,7 +587,7 @@ Homework Q7
 Restructure the vector dat of length 24 into a matrix with 6 rows and hence 4 rows. 
 By default matrix(data=dat, nrow=6) will use the first 6 elements of vector
 dat as the row values in the first column, the next 6 elements as the
-row values of the second columne ans so on for subsequent columns. 
+row values of the second column ans so on for subsequent columns. 
 
 Note many people prefer to enter data in Excel and read such files
 into R.  We will use this approach in our nest set of lectures
@@ -633,7 +646,7 @@ dotplot(mat,groups=FALSE,
 Homework Q10
 ===========
 * Use the help feature in R to display the version of R you are running
-* Document your script file by adding addtings to explain your work.
+* Document your script file by adding text to explain your work.
 * Save your history in a file and store in in your lecture_1 folder
 * Exit from RStudio
-* Upload your script file and its output and to blackboack or mail it to your instructor with a copy to wampeh@frb.gov and andrew.cohen@frb.gov
+* Upload your script file and its output and to blackboard or mail it to your instructor with a copy to wampeh@frb.gov and andrew.cohen@frb.gov
