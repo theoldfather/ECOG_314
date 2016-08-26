@@ -522,7 +522,7 @@ The mosaic package is designed to help simplify the interface for R users, while
 library(mosaic)
 ```
 
-```{r 
+```{reval=FALSE}
 
 options(digits=3)
   
