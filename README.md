@@ -5,10 +5,12 @@
 * To a new directory<br>
 git init<br>
 git remote add origin https://github.com/wampeh1/ECOG_314.git<br>
-git pull
+git pull  origin master
+
 
 * To an existing git folder<br>
-git pull
+git pull  origin master
+
 
 
 ## About this Course
