@@ -535,7 +535,7 @@ The mosaic package is designed to help simplify the interface for R users, while
 library(mosaic)
 ```
 
-```{reval=FALSE}
+```{r eval=FALSE}
 
 options(digits=3)
   
