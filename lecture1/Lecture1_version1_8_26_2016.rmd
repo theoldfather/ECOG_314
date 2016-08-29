@@ -287,17 +287,15 @@ getwd()                                      #the current directory accessible t
 
 Now that are familiar with R, we are going to look at the variable type that can be created in R
 
-<br>
-
- 
-
 <font color="red">Note</font>: Be mindful when creating variable names. **Symantically valid** variable names will be covered under Homeworks Q4 and Q5 in this lecture.
 
  
 
 <hr shadow=NONE>
 
-#### (1) Vectors of length one (atomic data types)
+#### Vectors
+
+A vector is the most basic data structure in R. All values are vectors. Even scalars are vectors of length 1, called atomic vectors in R.
 
 ##### Numeric (integer or double)
 ```{r }
@@ -567,8 +565,7 @@ Homework Q6
 
 **Task**
 
-Used R's c()function to create a vector with the following 24
-sets of values:
+Used R's `c()` function to create a vector with the following 24 values:
 
 
 22 50  8  2 13  6 
