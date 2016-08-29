@@ -297,11 +297,9 @@ Now that are familiar with R, we are going to look at the variable type that can
 
 <hr shadow=NONE>
 
+#### (1) Vectors of length one (atomic data types)
 
-
-####(1) Vectors of length one (atomic data types)
-
-* **Numeric (integer or double)**
+##### Numeric (integer or double)
 ```{r }
 value <- 1801           #integer
 value
@@ -326,7 +324,7 @@ lapply(c(value, myPi, pi), class )    #see the class of each of the variables
 ```
 
 
-* **Character**
+##### Character
 ```{r  }
 string <- "FRB 1801 K-Street"
 string
@@ -334,7 +332,7 @@ string
 class(string); typeof(string)
 ```
 
-* **Logical**
+##### Logical
 ```{r  }
 t <-  2 < 4
 t
@@ -342,7 +340,7 @@ t
 class(t); typeof(t)
 ```
 
-* **Complex**
+##### Complex
 ```{r  }
 z = 1 + 5i     # create a complex number 
 z  
@@ -350,8 +348,9 @@ z
 class(z); typeof(z)
 ```
 
-* **Factors**
+##### Factors
 Factors (categorical data) and dates are built on top of integers
+
 ```{r  }
 x <- factor( c("Yes", "No", "No", "Yes", "Yes", "Maybe") )    
 x  
@@ -373,7 +372,7 @@ Homeworks Q1 and Q2
 
 #### (2) Lists, sometimes called recursive vectors, because lists can contain other lists (the main difference between atomic vectors and lists).
 
-Lists are fundamentally richer than atomic vectors, because they can contain other lists, making them suitable for representing hierarchical or tree-like structures. You create a list with **list()**
+Lists are fundamentally richer than atomic vectors, because they can contain other lists, making them suitable for representing hierarchical or tree-like structures. You create a list with `list()`
 ```{r  }
 
 xList <- list(1, 2, 3)
