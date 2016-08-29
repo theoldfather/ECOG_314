@@ -15,7 +15,7 @@
   * Transform variables using the dplyr package, handle missing values, rename variables, keep and drop variables, remove duplicate observations, create summarized or aggregated datasets.
   * Export your dataset to some other format (CSV,JSON).
   * *Homework 2 assigned*.
-* **(Sept. 16) R Programming and Operating System Interface**
+* **(Sept. 16) R Programming**
   * Sequences and simple loops (iteration), conditional execution.
   * Writing functions, specifying function arguments and output, writing for loops, and testing variable scope.
   * Implement functions for selected descriptive statistics.
@@ -65,6 +65,6 @@
   * Git(Hub) and (R) Markdown crash course. 
   * *Homework 9 assigned*
 
-*(Nov. 11) University Closed for Thanksgiving*
+*(Nov. 25) University Closed for Thanksgiving*
 
 #### (Dec. 2) Project 2:	Final Class Project Presentation
