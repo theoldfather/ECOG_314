@@ -2,8 +2,8 @@
 
 ## Students
 
-* Download as a zip file: ECOG-314.zip
-* Download (clone) with Git (if you have it installed):
+* Download as a zip file: [ECOG-314.zip](https://github.com/wampeh1/ECOG_314/archive/master.zip)
+* Clone with Git (if you have it installed):
 
 ```bash
 git clone git@github.com:wampeh1/ECOG_314.git
