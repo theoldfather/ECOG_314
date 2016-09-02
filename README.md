@@ -1,17 +1,8 @@
 # Welcome to ECOG-314
 
-## To clone this repository to your local drive
+## Using this Repository
 
-* To a new directory<br>
-git init<br>
-git remote add origin https://github.com/wampeh1/ECOG_314.git<br>
-git pull  origin master
-
-
-* To an existing git folder<br>
-git pull  origin master
-
-
+For details on setting up this course for the first time, read [UsingGitHub.md](UsingGitHub.md).
 
 ## About this Course
 
