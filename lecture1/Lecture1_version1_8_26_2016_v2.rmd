@@ -599,15 +599,15 @@ for the resulting matrix:
 ```{r eval=FALSE}
 
 ###DO NOT RUN.  This is Q8, You must Fix this segment to run
-type <- "Married, Father Working", "Married, Both Working",
+type <- c("Married, Father Working", "Married, Both Working",
            "Divorced Mother","Never-married Mother",
-          "Other", "Grandparents"
+          "Other", "Grandparents")
           
-race <- "White", "Black", "Hispanic", "Asian"
+race <- c("White", "Black", "Hispanic", "Asian")
 ### end of fix to run
 
-rownames(mat) <- type
-colnames(mat) <- race
+rownames(mat) <- race
+colnames(mat) <- type
 mat
 
 ```
