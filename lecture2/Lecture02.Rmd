@@ -762,3 +762,38 @@ sum(en_words %in% neg_dict) / length(en_words)
 We could repreat this process with another Shakespeare work and compare their sentiment. The accuracy of the estimate would be even better if we could convince a shakespearean literary expert to write a custom dictionary of negatives words for us. But our result is okay for a few minutes of effort.
 
 #### Images
+
+R can load images using `jpeg`.
+
+```{r}
+library(jpeg)
+four<-readJPEG("data/four.jpeg")
+dim(four)       # a 3rd order tensor
+```
+
+```{r}
+image(four[,,1])
+```
+
+The orientation is strange. Take the transpose and then reverse it.
+
+```{r}
+image(t(four[,,1])[,500:1])
+flip<-function(x) { t(x)[,ncol(x):1] }
+```
+
+That's a neat trick. Why is this useful? What if we had handwritten digits.. a lot of them.
+
+```{r}
+digits<-read_csv("data/digits.csv")
+names(digits)[1:5]
+```
+What might a typical 9 look like?
+
+```{r}
+label<-digits$label
+images<-as.matrix(digits[,-1])
+nines<-images[label==9,]
+typical_nine<-matrix(colMeans(nines),ncol=28)
+image(typical_nine[,28:1])
+```
