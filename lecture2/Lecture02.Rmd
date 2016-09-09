@@ -53,8 +53,8 @@ codebook<-data.frame(name=short_names,
 names(unemp)<-short_names
 
 # write both the codebook and rename data to disk as tab-delimited files
-write_tsv(codebook,"data/unemp_codebook.txt")
-write_tsv(unemp,"data/unemp.txt")
+write_tsv(codebook,"data/unemp_codebook.tsv")
+write_tsv(unemp,"data/unemp.tsv")
 ```
 
 Now that it is saved, let's keep working with the data and see what we else can do. The `dplyr` package is an excellent way to manipulate data frame and summarize data.
