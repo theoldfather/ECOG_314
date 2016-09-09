@@ -227,6 +227,6 @@ typical_nine<-matrix(colMeans(nines),ncol=28)
 image(typical_nine[,28:1])
 ```
 
-If we were given a new digit image and wanted to know whether or not is was a 9, we could measure its distance from the typical 9 in "pixel space". Comparing this to the distance of other typical digits, we would classify it as a 9 if 9 was the nearest digit.
+If we were given a new digit image and wanted to know whether or not is was a 9, we could measure its distance from the typical 9 in "digit space". Comparing this to the distance of other typical digits, we would classify it as a 9, if 9 was the nearest digit.
 
 This is a toy example of image recognition that is an area of machine learning. Hedge Funds have begun using image recognition on satellite imagery of cropland to make financial forecasts ([source](http://www.wsj.com/articles/satellites-hedge-funds-eye-in-the-sky-1471207062)). Other areas of interest might be to look at the signaling of status via luxury goods on instagram.
