@@ -518,21 +518,21 @@ M&lt;-matrix(rpois(3^2,5),nrow=3,
     dimnames=list(c(&quot;good&quot;,&quot;bad&quot;,&quot;ugly&quot;))[c(1,1)])  
 M</code></pre>
 <pre><code>##      good bad ugly
-## good    4   6    5
-## bad     4   6    4
-## ugly    5   7    2</code></pre>
+## good    4   4    5
+## bad     2   1    5
+## ugly    4   7    6</code></pre>
 <p>We might want to think about this data in terms of the probability of moving between each state. To do this we can simply normalize each row by its sum.</p>
 <pre class="r"><code>M / rowSums(M)</code></pre>
 <pre><code>##           good       bad      ugly
-## good 0.2666667 0.4000000 0.3333333
-## bad  0.2857143 0.4285714 0.2857143
-## ugly 0.3571429 0.5000000 0.1428571</code></pre>
+## good 0.3076923 0.3076923 0.3846154
+## bad  0.2500000 0.1250000 0.6250000
+## ugly 0.2352941 0.4117647 0.3529412</code></pre>
 <p>R has <code>rowSums()</code> and <code>rowMeans()</code> and their column counterparts <code>colSums()</code> and <code>colMeans()</code> built-in. In addition, we can <code>apply()</code> any R function to a row or column of a matrix, or to any slice of a tensor. To demonstrate we could also write the operation above as follows:</p>
 <pre class="r"><code>M / apply(M,1,sum)    </code></pre>
 <pre><code>##           good       bad      ugly
-## good 0.2666667 0.4000000 0.3333333
-## bad  0.2857143 0.4285714 0.2857143
-## ugly 0.3571429 0.5000000 0.1428571</code></pre>
+## good 0.3076923 0.3076923 0.3846154
+## bad  0.2500000 0.1250000 0.6250000
+## ugly 0.2352941 0.4117647 0.3529412</code></pre>
 <p><code>apply()</code> takes three arguments:</p>
 <ol style="list-style-type: decimal">
 <li>The <strong>array</strong></li>

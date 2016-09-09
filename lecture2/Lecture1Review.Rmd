@@ -5,9 +5,7 @@ date: "September 9, 2016"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 Let's review the data types introduced in the first lecture and dig a bit deeper. What is the difference between a **data type** and a **data structure**? What values can we represent in R? Are there values we cannot represent? 
 

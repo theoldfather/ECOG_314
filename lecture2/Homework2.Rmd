@@ -3,11 +3,8 @@ title: "Homework 2"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-For the following questions, please save your R code in a file called `HW2_lastname_firstname.R>` and then email it to [jeremy.d.oldfather@frb.gov](mailto:jeremy.d.oldfather@frb.gov) and cc to [william.ampeh@frb.gov](mailto:william.ampeh@frb.gov).
+For the following questions, please save your R code in a file called `HW2_lastname_firstname.R` and then email it to [jeremy.d.oldfather@frb.gov](mailto:jeremy.d.oldfather@frb.gov) and cc to [william.ampeh@frb.gov](mailto:william.ampeh@frb.gov).
 
 #### 1. Vectors
 
