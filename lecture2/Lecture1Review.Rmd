@@ -58,7 +58,7 @@ stop(text)      # generates an error message and stops the program
 
 #### Numeric
 
-The numeric mode includes the data types: *double*, *integer*, and *complex*. Complex types are not used often, so we will skip them for now. However, you might see them pop-up in the results of decompositions. For example, the eigenvalues from an eigendecomposition may be complex in some cases.
+The numeric mode includes the data types: *double* and *integer*. Complex types have their own mode and are not used often. 
 
 ##### Double
 
@@ -126,6 +126,31 @@ y                             # now NA
 ```
 Okay, I'm a believer now. We have not verified the lower bound, but I will let you check this on your own.
 
+#### Complex
+
+Complex types have their own mode and are not used often. However, you might see them pop-up in the results of decompositions. For example, the eigenvalues from an eigendecomposition may be complex in some cases.
+
+**type summary:**
+```r
+x<-1+3i
+typeof(x)           # complex
+class(x)            # complex
+mode(x)             # complex
+storage.mode(x)     # complex
+object.size(x)      # 56 bytes
+```
+To get the real part, we can use `Re()` and for the imaginary part, `Im()`.
+
+```{r}
+Re(x)
+Im(x)
+```
+
+If we use `as.double()`, it will work, but warn us if the imaginary part is non-zero.
+
+```{r}
+as.double(x)
+```
 
 #### Logical
 

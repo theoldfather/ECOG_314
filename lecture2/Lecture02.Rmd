@@ -20,16 +20,16 @@ The most widely used format for spreadsheet-type data is a text file where the c
 R has built-in functions to read and write delimited files: `read.csv()`, `read.table()`, `read.delim()`. However, there are better versions of these available in the package `readr`: `read_csv()`, `read_table()`, `read_delim()`. 
 We can read local files from our computers or remotely from URLs. Let's read a csv of unemployment data from github.
 
-```{r,warning=FALSE}
+```{r}
 library(readr)
 unemp<-read_csv("https://raw.githubusercontent.com/datasets/us-employment-bls/master/data/aat1.csv")
 ```
 
-`readr` gives us feedback about how it parsed the csv. For example, it realized that the `Year` column only contained integer values and decided to store that column as an integer vector. This saves space in memory and removes the need for us to do this manually. 
+`readr` gives us feedback about how it parsed the csv. For example, it recognized that the `Year` column only contained integer values and decided to store that column as an integer vector. This saves space in memory and removes the need for us to do this manually. 
 
 The variable names in the csv, though very descriptive, are not friendly to type. So we might like to rename the variables then save the data and a codebook to disk for later use.
 
-```r
+```{r}
 # new names for the columns
 short_names<-c('year',
                'civ_noninst_pop',
@@ -53,15 +53,37 @@ codebook<-data.frame(name=short_names,
 names(unemp)<-short_names
 
 # write both the codebook and rename data to disk as tab-delimited files
-write_tsv(codebook,"lecture2/data/unemp_codebook.txt")
-write_tsv(unemp,"lecture2/data/unemp.txt")
+write_tsv(codebook,"data/unemp_codebook.txt")
+write_tsv(unemp,"data/unemp.txt")
 ```
 
-#### Proprietary Formats
+Now that it is saved, let's keep working with the data and see what we else can do. The `dplyr` package is an excellent way to manipulate data frame and summarize data.
 
-##### Reading from Excel
+##### Exploring with dplyr and ggplot2
 
+```{r}
+library(dplyr)
+unemp %>% summarise(first=min(year),last=max(year))
+```
 
+The dplyr `%>%` notation means, take the output of the thing on the left and pass it to the thing on the right. It is a fancy way of doing function composition. Instead of writing `f(g(h(x)))` we can write `x %>% h() %>% g() %>% f()`. Writing it this way makes it easier to remove `g()` if we don't want it to be part of the pipeline of operations anymore.
+
+We can also plot the unemployment rate easily with the `ggplot2` package. I give you the following code without much explanation, but it will be covered in a later lesson.
+
+```{r, fig.align="center"}
+library(ggplot2)
+unemp %>% 
+  ggplot(aes(year,unemp_pct_lf)) + 
+  geom_line() + labs(y="Unemployment Rate",x="")
+```
+
+By slightly altering the code above, we can also plot the share of those employed in agriculture. We would expect to see it drop over time.
+
+```{r, fig.align="center"}
+unemp %>% 
+  ggplot(aes(year,emp_ag_tot/emp_tot)) + 
+  geom_line() + labs(y="Share Employed in Agriculture",x="")
+```
 
 ### Semi-Structured
 
@@ -71,7 +93,7 @@ Semi-structured dataset are those do not cleanly fit in a spreadsheet format. Th
 
 WMATA is an example of a local service that provides a data feed. For detailed info, see [developer.wmata.com](https://developer.wmata.com).
 
-One of the many things WMATA allows us to do is get informations on [bus positions](https://developer.wmata.com/docs/services/54763629281d83086473f231/operations/5476362a281d830c946a3d68). We saw above that the `read` class of functions allows us to get data from URLs. However, they do not allows us to customize the query, which is something we need to since most APIs require us to pass a key. For this, we can use the `httr` packages.
+One of the many things WMATA allows us to do is get informations on [bus positions](https://developer.wmata.com/docs/services/54763629281d83086473f231/operations/5476362a281d830c946a3d68). We saw above that the `readr` class of functions allows us to get data from URLs. However, they do not allow us to customize the query, which is something we need since most APIs require us to pass an authorization key. For this, we can use the `httr` packages.
 
 Let's find out where all the 70 buses are right now.
 
@@ -83,7 +105,7 @@ resp<-GET("https://api.wmata.com/Bus.svc/json/jBusPositions",
           )
 ```
 
-The code above creates a response object that contains both the raw JSON response from WMATA and also a parsed version that `httr` automatically turned into a list. Let's the details of the first bus in the list object.
+The code above creates a response object that contains both the raw JSON response from WMATA and also a parsed version that `httr` automatically turned into a list. Let's look at the details of the first bus in the list object.
 
 ```{r}
 # look at the first bus in the data feed
@@ -101,18 +123,18 @@ That is messy. We can clean it up with the `jsonlite` package.
 
 ```{r}
 library(jsonlite)
-toJSON(r70[[1]],pretty=T)
+toJSON(r70[[1]],pretty=T)   # convert the list to JSON and "prettify" it
 ```
 
 Ah, much better. Notice we just turned a list object into JSON text. JSON is a great way to export arbitrary list objects from R to other programs.
 
-Let's save this "pretty" version of the data feed to a file for use later.
+Let's save this nicely formatted version of the data-feed to a file for use later.
 
 ```r
 write_file(toJSON(content(resp),pretty=T),"lecture2/data/route_70.json")
 ```
 
-To load it again later, we can read the file into a character vector and then parse it from JSON to a list.
+To load it later, we can read the file into a character vector and then parse it from JSON to a list using `fromJSON()`.
 
 ```r
 r70<-fromJSON(read_file("lecture2/data/route_70.json"))
@@ -136,7 +158,7 @@ length(words)
 head(words)
 ```
 
-Many of the words in the text are not unique. We can factor to save space.
+Many of the words in the text are not unique. We can factor to save space. In text mining, this is called tokenizing.
 
 ```{r}
 object.size(words)
@@ -144,7 +166,7 @@ tokens<-factor(words)
 object.size(tokens)
 ```
 
-That is a little smaller. Let make everything lowercase so that terms like "The" and "the" are the same token.
+That is a little smaller. Let's make everything lowercase so that terms like "The" and "the" are the same token.
 
 ```{r}
 words<-tolower(words)
@@ -183,11 +205,10 @@ dim(four)       # a 3rd order tensor
 image(four[,,1])
 ```
 
-The orientation is strange. Take the transpose and then reverse it.
+The orientation is strange. Take the transpose and/or reverse it looks correct.
 
 ```{r}
-image(t(four[,,1])[,500:1])
-flip<-function(x) { t(x)[,ncol(x):1] }
+image(t(four[,,1])[,ncol(four):1])
 ```
 
 That's a neat trick. Why is this useful? What if we had handwritten digits (a lot of them) and we wanted to decide was number was represented in each image without looking at each one? 
@@ -206,4 +227,6 @@ typical_nine<-matrix(colMeans(nines),ncol=28)
 image(typical_nine[,28:1])
 ```
 
-This is a toy of example of image recognition that is an area of machine learning. Hedge Funds have begun using image recognition on satellite imagery to make financial forecasts ([source](http://www.wsj.com/articles/satellites-hedge-funds-eye-in-the-sky-1471207062)). 
+If we were given a new digit image and wanted to know whether or not is was a 9, we could measure its distance from the typical 9 in "pixel space". Comparing this to the distance of other typical digits, we would classify it as a 9 if 9 was the nearest digit.
+
+This is a toy example of image recognition that is an area of machine learning. Hedge Funds have begun using image recognition on satellite imagery of cropland to make financial forecasts ([source](http://www.wsj.com/articles/satellites-hedge-funds-eye-in-the-sky-1471207062)). Other areas of interest might be to look at the signaling of status via luxury goods on instagram.

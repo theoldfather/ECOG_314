@@ -155,7 +155,7 @@ stop(text)      # generates an error message and stops the program</code></pre>
 </div>
 <div id="numeric" class="section level4">
 <h4>Numeric</h4>
-<p>The numeric mode includes the data types: <em>double</em>, <em>integer</em>, and <em>complex</em>. Complex types are not used often, so we will skip them for now. However, you might see them pop-up in the results of decompositions. For example, the eigenvalues from an eigendecomposition may be complex in some cases.</p>
+<p>The numeric mode includes the data types: <em>double</em> and <em>integer</em>. Complex types have their own mode and are not used often.</p>
 <div id="double" class="section level5">
 <h5>Double</h5>
 <p>Numeric values (real numbers) are represented in R as doubles by default. What is a <em>double</em>? Easy–a double is twice as “large”&quot; as a <strong>single</strong>. But let me dodge the concept of size for a few more minutes.</p>
@@ -207,6 +207,25 @@ storage.mode(y)&lt;-&quot;integer&quot;    # generates warning</code></pre>
 <pre><code>## [1] NA</code></pre>
 <p>Okay, I’m a believer now. We have not verified the lower bound, but I will let you check this on your own.</p>
 </div>
+</div>
+<div id="complex" class="section level4">
+<h4>Complex</h4>
+<p>Complex types have their own mode and are not used often. However, you might see them pop-up in the results of decompositions. For example, the eigenvalues from an eigendecomposition may be complex in some cases.</p>
+<p><strong>type summary:</strong></p>
+<pre class="r"><code>x&lt;-1+3i
+typeof(x)           # complex
+class(x)            # complex
+mode(x)             # complex
+storage.mode(x)     # complex
+object.size(x)      # 56 bytes</code></pre>
+<p>To get the real part, we can use <code>Re()</code> and for the imaginary part, <code>Im()</code>.</p>
+<pre class="r"><code>Re(x)</code></pre>
+<pre><code>## [1] 2147483647</code></pre>
+<pre class="r"><code>Im(x)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>If we use <code>as.double()</code>, it will work, but warn us if the imaginary part is non-zero.</p>
+<pre class="r"><code>as.double(x)</code></pre>
+<pre><code>## [1] 2147483647</code></pre>
 </div>
 <div id="logical" class="section level4">
 <h4>Logical</h4>
@@ -499,21 +518,21 @@ M&lt;-matrix(rpois(3^2,5),nrow=3,
     dimnames=list(c(&quot;good&quot;,&quot;bad&quot;,&quot;ugly&quot;))[c(1,1)])  
 M</code></pre>
 <pre><code>##      good bad ugly
-## good    6   4    7
-## bad     3   7    1
-## ugly    7   1    6</code></pre>
+## good    4   6    5
+## bad     4   6    4
+## ugly    5   7    2</code></pre>
 <p>We might want to think about this data in terms of the probability of moving between each state. To do this we can simply normalize each row by its sum.</p>
 <pre class="r"><code>M / rowSums(M)</code></pre>
-<pre><code>##           good        bad       ugly
-## good 0.3529412 0.23529412 0.41176471
-## bad  0.2727273 0.63636364 0.09090909
-## ugly 0.5000000 0.07142857 0.42857143</code></pre>
+<pre><code>##           good       bad      ugly
+## good 0.2666667 0.4000000 0.3333333
+## bad  0.2857143 0.4285714 0.2857143
+## ugly 0.3571429 0.5000000 0.1428571</code></pre>
 <p>R has <code>rowSums()</code> and <code>rowMeans()</code> and their column counterparts <code>colSums()</code> and <code>colMeans()</code> built-in. In addition, we can <code>apply()</code> any R function to a row or column of a matrix, or to any slice of a tensor. To demonstrate we could also write the operation above as follows:</p>
 <pre class="r"><code>M / apply(M,1,sum)    </code></pre>
-<pre><code>##           good        bad       ugly
-## good 0.3529412 0.23529412 0.41176471
-## bad  0.2727273 0.63636364 0.09090909
-## ugly 0.5000000 0.07142857 0.42857143</code></pre>
+<pre><code>##           good       bad      ugly
+## good 0.2666667 0.4000000 0.3333333
+## bad  0.2857143 0.4285714 0.2857143
+## ugly 0.3571429 0.5000000 0.1428571</code></pre>
 <p><code>apply()</code> takes three arguments:</p>
 <ol style="list-style-type: decimal">
 <li>The <strong>array</strong></li>
