@@ -1,5 +1,5 @@
 ---
-title: "Exploratory Data Analysis"
+title: "Exploring Data"
 author: "Damian Thomas"
 date: "2016-09-16"
 output: html_document
@@ -62,10 +62,17 @@ The windows in the default layout can be broken down into two broad categories, 
 * Functions: input and output objects, take parameters 
 * Everything is an object or a function, unless it's an environment  ([what's an environment?](https://www.r-bloggers.com/what-is-an-r-environment/)) 
 
-Subset objects by indexing.
+Subset objects by indexing: "[", "[[", or "$" -- mnemonics:
+
+* "x[7]", equivalent to $x_{7}$, "7***th*** element from vector x"
+* "X[4,5]", equivalent to $X_{4,5}$, "4***th*** row, 5***th*** column from matrix X"
+* "student[[GPA]]", equivalent to the "GPA ***of*** student"
+* "student[[3]]", equivalent to the "3rd part ***of*** student"
+* "student$GPA", equivalent to "student***'s*** GPA" 
 
 Do things with objects using functions
 
+* f(x), just like $f(x)$, returns the value of "f evaluated at x"
 
 
 ### Reading Data
@@ -126,7 +133,7 @@ Do things with objects using functions
     b. go the **Session** menu, select **Load Workspace** 
     c. use the **load()** function 
     
-* Customize Appearance: go to **Tools** menu, then select **Global Options**, then choose **Appearance** (the paint bucket icon).  From there you can choose a color theme for syntax highlighting and change the default font size. 
+* Customize Appearance: go to **Tools** menu, then select **Global Options**, then choose **Appearance** (the paint bucket icon).  From there you can choose a color theme for syntax highlighting and change the default font size. Other part of menu disable automatic quote matching, etc.
 
 * Set working directory
 
@@ -134,7 +141,7 @@ Do things with objects using functions
 
 ## Exploring Data 
 
-There are 3 major types of data set: time-series, cross-sectional, and panel or longitudinal.
+Data sets fall into 3 major catgories: time-series, cross-sectional, and panel or longitudinal.
 
 
 ### Time series Data
@@ -172,11 +179,11 @@ The St. Louis Fed provides thousands of time series to the public ([https://fred
 # base R function
 hhnw <- read.csv("data/TNWBSHNO.csv")
 ```
+Now what?
 
 ### Step 4 - Look at the raw data again (in R)
 
-
-* Browse the data frame in Rstudio -- click on the object name  the object in the (Environment tab) 
+* Browse the data frame in Rstudio -- click on the object name (in the Environment tab) 
 * Use R commands to print information about the data frame 
 
 ```{r look_at_time_series_1}
@@ -186,8 +193,11 @@ str(hhnw)
 # Print the first few rows of data
 head(hhnw)
 
-# Print the last few rows of data
+# And, print the last few rows of data
 tail(hhnw)
+
+# maybe even print 5 random rows of data
+hhnw[sample(1:nrow(hhnw), 5),]
 ```
 
 From these commands we know a little bit about how the data
@@ -202,19 +212,16 @@ From these commands we know a little bit about how the data
 
 Problems
 
-1. We have factors instead of strings  
-2. Variable names:  
-    a. are in all caps 
-    b. variable names are not very informative 
-3. The variable "DATE" is stored as character data.  
-4. We have missing values 
+ 
+1. We have missing values 
+2. Variable names:  (a) in all caps, (b) not very informative
+3. Default data types and units don't make sense 
 
 Fixes
 
-1. Use options in read.csv 
-2. rename variables 
-3. Convert the Date variable from character type a date type. 
-4. Use read.csv options to identify missing values. 
+1. Use options to tell read.csv()
+2. Rename variables 
+3. Transform the data
 
 ```{r convert_strings_to_dat es}
 # start over
@@ -229,6 +236,9 @@ names(hhnw) <- c("date", "level")
 # Convert the character type into a date type
 hhnw$date <- as.Date(hhnw$date, format="%Y-%m-%d")
 
+# Convert millions to billions
+hhnw$level <- round(hhnw$level / 1000, digits = 1)
+
 # Look at the data
 str(hhnw)
 head(hhnw)
@@ -239,24 +249,93 @@ Better?
 
 ### Step 6 - Numeric summaries
 
-* Summary Statistics
-```{r numeric_summary}
-summary(hhnw$level)
+Introducing the base R functions 
+
+* summary()
+* min() 
+* max()
+* mean() 
+* var() 
+* sd() 
+* quantile() 
+* median()
+
+```{r summary_function1}
+# The easy way - tell me about this data frame
+summary(hhnw)
 ```
 
-* summaries for subsets of data
+```{r summary_function2}
+# summary of household net worth's level measure (only)
+summary(hhnw$level)  
+```
+
+```{r ts_summary_functions}
+# DIY summary statistics
+mean(hhnw$level, na.rm=TRUE)
+max(hhnw$level, na.rm=TRUE)
+quantile(hhnw$level, na.rm=TRUE)
+quantile(hhnw$level, probs=c(0.10, 0.90), na.rm=TRUE)
+sd(hhnw$level, na.rm=TRUE)
+```
+
+
+Data manipulation 
+
+* subset()
+* merge()
+
+```{r ts_derive_variables}
+
+```
+
 ```{r summary_on_subset}
-hhnw_pre_crisis <- subset(hhnw, hhnw$date < as.Date("2007-06-01"))
-summary(hhnw_pre_crisis)
+# Create subsets of the data frame 
+pre_crisis <- subset(hhnw, hhnw$date < as.Date("2007-06-01"))
 
-hhnw_post_crisis <- subset(hhnw, hhnw$date >= as.Date("2007-06-01"))
-summary(hhnw_post_crisis)
+summary(pre_crisis)
+
+post_crisis <- subset(hhnw, hhnw$date >= as.Date("2007-06-01"))
+
+summary(post_crisis)
 ```
 
-Answer questions about the data
 
-* what is the maximum value, and when did it occur? 
-* what is the minimum value, and when did it occur? 
+### Step 6 - Visual presentation
+
+* Line graph  
+* Histogram 
+* Boxplot  
+
+```{r plot_time_series}
+# Visualize every observation in the time series with a line plot
+plot(hhnw$date, hhnw$level, type = "l") 
+
+# viualize distribution with histogram
+hist(hhnw$level)
+
+# visualize distribution with boxplot
+boxplot(hhnw$level)
+
+# compare subsets with side-by-sde plots
+boxplot(pre_crisis$level, main = "Pre Crisis")
+boxplot(post_crisis$level, main = "Post Crisis")
+```
+
+* advanced option:
+
+```{r plot_time_series2}
+# compare subsets with side-by-sde plots
+par(mfrow=c(1,2))
+boxplot(pre_crisis$level, main = "Pre Crisis")
+boxplot(post_crisis$level, main = "Post Crisis")
+```
+
+
+#### Exercises: Answer specific questions about the data
+
+* what is the all time high, when did it occur? 
+* what was the previous high, and when did it occur? 
 * compare the period before and after the crisis 
     a. max values 
     b. min values 
@@ -268,33 +347,7 @@ Answer questions about the data
 ```{r answer_time_series_qs}
 #...
 ```
-
-
-
-### Step 6 - Visual presentation
-
-* Line graph  
-* Histogram 
-* Boxplot  
-
-```{r plot_time_series}
-# Visualize every observation with a line plot
-plot(hhnw$date, hhnw$level, type = "l") 
-
-# viualize distribution with histogram
-hist(hhnw$level)
-
-# visualize distribution with boxplot
-boxplot(hhnw$level)
-
-# compare subsets with side-by-sde plots
-par(mfrow=c(1,2))
-boxplot(hhnw_pre_crisis$level)
-boxplot(hhnw_post_crisis$level)
-```
-
-* advanced option: plot recessions with shading
-
+     
 
 ### Cross Sectional Data
 
@@ -328,3 +381,5 @@ http://r4ds.had.co.nz/
 
 https://github.com/hadley/r4ds
 
+
+"R is a language, spoken to computers and other programmers"
