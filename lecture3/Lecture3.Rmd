@@ -223,7 +223,7 @@ Fixes
 2. Rename variables 
 3. Transform the data
 
-```{r convert_strings_to_dat es}
+```{r convert_strings_to_dates}
 # start over
 rm(hhnw)
 
@@ -285,9 +285,6 @@ Data manipulation
 * subset()
 * merge()
 
-```{r ts_derive_variables}
-
-```
 
 ```{r summary_on_subset}
 # Create subsets of the data frame 
@@ -299,6 +296,7 @@ post_crisis <- subset(hhnw, hhnw$date >= as.Date("2007-06-01"))
 
 summary(post_crisis)
 ```
+
 
 
 ### Step 6 - Visual presentation
@@ -329,6 +327,120 @@ boxplot(post_crisis$level, main = "Post Crisis")
 par(mfrow=c(1,2))
 boxplot(pre_crisis$level, main = "Pre Crisis")
 boxplot(post_crisis$level, main = "Post Crisis")
+```
+
+* Good enough? We can do better.  
+* Clear workspace.
+
+### More Data Cleaning
+
+Addtional problems
+
+1. limited information from single time series
+    a. the level measure only: no flows, growth rates, etc.
+    b. important dates are not clearly marked  
+2. creating a new data frame for every subset can be unweildy  
+3. Shortcut for readable dates would be nice 
+
+Fixes
+
+1. Compute new variables, and add more data to the data frame  
+    a. flow measure: $\textrm{flow}_t = \textrm{level}_{t} - \textrm{level}_{t-1}$  
+    b. growth rate: $\textrm{growth}_t = 100 * \textrm{flow}_{t} \textrm{level}_{t-1}$   
+2. categorize or label each observation --  identify recession periods 
+3. create alternative dates  
+
+First, get more data. Download recession data from [FRED](https://fred.stlouisfed.org/release?rid=242)): [NBER based Recession Indicators for the United States from the Period following the Peak through the Trough](https://fred.stlouisfed.org/series/USRECQ)
+
+We will also need a function to compute lags in a data frame. A brief digression:
+
+```{r define_shift}
+# R functions are objects that contain instructions
+
+prior_value <- function(x, k=1) {
+    x <- c(rep(NA, k), head(x, -k))
+    return(x)
+}
+
+next_value <- function(x, k=1) {
+    x <- c(tail(x, -k), rep(NA, k))
+    return(x)
+}
+
+# Test with simple sequece
+foo <- 1:10
+
+prior_value(foo) # lag
+
+next_value(foo) # lead
+
+foo - prior_value(foo) # compute change
+```
+
+
+Rebuild our data set with the new components
+
+```{r remake_ts_dataframe}
+
+# Read the raw file
+hhnw <- read.csv("data/TNWBSHNO.csv", na.strings=".", stringsAsFactors = FALSE)
+
+# Change names
+names(hhnw) <- c("date", "level")
+
+# Convert the character type into a date type
+hhnw$date <- as.Date(hhnw$date, format="%Y-%m-%d")
+
+# Create a simple time index
+hhnw$t <- seq(1, nrow(hhnw))
+
+# Label quarters
+hhnw$q <- ceiling(as.integer(format(hhnw$date, "%m")) / 3)
+
+hhnw$quarter <- paste(format(hhnw$date, "%Y"), hhnw$q, sep=":Q")
+
+# Convert millions to billions
+hhnw$level <- round(hhnw$level / 1000, digits = 1)
+
+# compute the flow (change in level)
+hhnw$flow <- hhnw$level - prior_value(hhnw$level)
+
+# compute the growth rate (one quarter trend)
+hhnw$growth <- 100 * ( hhnw$flow ) / prior_value(hhnw$level) 
+```
+
+Merge in recession indicator
+
+```{r merge_tz}
+# After inpecting the raw data, read it into R
+# use ?read.csv command to view explanation of these parameters
+cycle <- read.csv("data/USRECQ.csv", col.names=c("date", "recession"), colClasses = c("Date", "integer"), stringsAsFactors = FALSE)
+
+# Merge the two data sets
+hhnw <- merge(hhnw, cycle, by = "date", all.x = TRUE)
+
+# Fill in missing values with zero
+hhnw$recession <- ifelse(is.na(hhnw$recession), 0, hhnw$recession)
+
+# Look at the data (again)
+str(hhnw)
+head(hhnw)
+tail(hhnw)
+```
+
+```{r replot_ts}
+plot(hhnw$date, hhnw$level, main = "Household Net Worth, Level")
+plot(hhnw$date, hhnw$flow, main = "Household Net Worth, Flow")
+plot(hhnw$date, hhnw$growth, main = "Household Net Worth, Growth Rate")
+
+plot(hhnw$q, hhnw$flow, main="Household Net Worth: Flows by Quarter")
+
+
+par(mfrow=c(1,2))
+boxplot(hhnw[ hhnw$recession==1,  "level"], main = "Household Net Worth: Growth Rate During Recessions")
+
+boxplot(hhnw[ hhnw$recession==0,  "level"], main = "Household Net Worth: Growth Rate During Expansions")
+
 ```
 
 
