@@ -38,29 +38,29 @@ Compare to the [broader trends](http://r4stats.com/articles/popularity/)
 
 ### Rstudio -- Four Panels and a Menu 
 
-The windows in the default layout can be broken down into two broad categories, according to their purpose.
+The windows in the default layout can be broken down into two broad categories, according to their purpose. 
 
-1. Inputs from user
+1. Inputs from user 
     * Console: interactive R prompt 
     * Text Editor: view, create, and change contents of text files 
-2. Outputs from R
-    * Console: interactive R prompt
+2. Outputs from R 
+    * Console: interactive R prompt 
     * Environment: current workspace, previous commands 
     * Viewer: View plots, help documentation, etc. 
 
 
 ### R Object types
 
-* Vectors: one dimension, one type
-* Lists: one dimension, many types
-* Matrices: two dimensions, one type
-* Data Frames: two dimensions, many types
+* Vectors: one dimension, one type 
+* Lists: one dimension, many types 
+* Matrices: two dimensions, one type 
+* Data Frames: two dimensions, many types 
 
 ### R syntax
 
-* Objects: store information
-* Functions: input and output objects, take parameters
-* Everything is an object or a function, unless it's an environment ([what's an environment?](https://www.r-bloggers.com/what-is-an-r-environment/))
+* Objects: store information 
+* Functions: input and output objects, take parameters 
+* Everything is an object or a function, unless it's an environment  ([what's an environment?](https://www.r-bloggers.com/what-is-an-r-environment/)) 
 
 Subset objects by indexing.
 
@@ -70,15 +70,15 @@ Do things with objects using functions
 
 ### Reading Data
 
-* Delimited text files (CSV, tab, text, etc): use base R functions, or functions from the readr package
-* Excel, stata, etc.: use packages (foreign, etc.)
-* unstructured data:
+* Delimited text files (CSV, tab, text, etc): use base R functions, or functions from the readr package 
+* Excel, stata, etc.: use packages (foreign, etc.) 
+* unstructured data: 
 
 ### Viewing Data
 
-* Environment tab: click on the object
-* print() function: type the object name at command prompt and press enter
-* View() function: in RStudio
+* Environment tab: click on the object 
+* print() function: type the object name at command prompt and press enter 
+* View() function: in RStudio 
 
 
 ### Running Code 
@@ -90,7 +90,7 @@ Do things with objects using functions
     b. Editor: 
         * select the text, then click **Run** 
         * select the text, then press **Ctrl+Enter** 
-        * place the cursor on the line of code, then press **Ctrl+Enter** 
+        * place the cursor on the line of code, then press **Ctrl+Enter**  
 2. Multiple lines of code 
      a. Console: type commands separated by semicolons, press enter 
      b. RStudio Editor: 
@@ -101,8 +101,8 @@ Do things with objects using functions
      a. Console: use the **source()** function to execute commands saved in a file 
      b. RStudio Editor: 
           * open the file, then press **Ctrl+Shift+Enter** 
-          * open the file, then press the **Source** button
-     c. Batch Mode (outside of RStudio)
+          * open the file, then press the **Source** button 
+     c. Batch Mode (outside of RStudio) 
           * go to system command prompt, then execute the command: **R CMD BATCH filename.R** 
 
 4. Markdown documents (e.g., lecture2.Rmd) open the file and press the **Knit HTML** button. 
@@ -111,22 +111,22 @@ Do things with objects using functions
     
 ### Managing your Rstudio session 
 
-* Save workspace: write objects in memory to a file
-    a. go to the **Environment** tab, then click on the blue disk icon
-    b. go the **Session** menu, select **Save Workspace As**
-    c. use the **save()** function
+* Save workspace: write objects in memory to a file 
+    a. go to the **Environment** tab, then click on the blue disk icon 
+    b. go the **Session** menu, select **Save Workspace As** 
+    c. use the **save()** function 
     
-* Clear workspace: remove objects from memory
-    a. go to the **Environment** tab, then click on the yellow broom icon
-    b. go the **Session** menu, select **Load Workspace**
-    c. use the **ls()** and **rm()** functions
+* Clear workspace: remove objects from memory 
+    a. go to the **Environment** tab, then click on the yellow broom icon 
+    b. go the **Session** menu, select **Load Workspace** 
+    c. use the **ls()** and **rm()** functions  
 
-* Reload saved workspace, or read objects that were saved to a file
-    a. go to the **Environment** tab, then click on the yellow and green folder icon
-    b. go the **Session** menu, select **Load Workspace**
-    c. use the **load()** function
+* Reload saved workspace, or read objects that were saved to a file 
+    a. go to the **Environment** tab, then click on the yellow and green folder icon 
+    b. go the **Session** menu, select **Load Workspace** 
+    c. use the **load()** function 
     
-* Customize Appearance: go to **Tools** menu, then select **Global Options**, then choose **Appearance** (the paint bucket icon).  From there you can choose a color theme for syntax highlighting and change the default font size.
+* Customize Appearance: go to **Tools** menu, then select **Global Options**, then choose **Appearance** (the paint bucket icon).  From there you can choose a color theme for syntax highlighting and change the default font size. 
 
 * Set working directory
 
@@ -149,8 +149,9 @@ Examples: Unemployment rate, GDP, my height
 
 The St. Louis Fed provides thousands of time series to the public ([https://fred.stlouisfed.org/](https://fred.stlouisfed.org/)). 
 
-* Choose an example and download it as a csv file.
-* Advanced option: use the quantmod package to download directly from R
+* Choose an example and download it as a csv file.  
+* Advanced option: use the quantmod package to download directly from R 
+
 ```{r download_time_series}
 # install.packages(quantmod)
 # if ( !file.exists() ) download.file()
@@ -158,26 +159,25 @@ The St. Louis Fed provides thousands of time series to the public ([https://fred
 
 ### Step 2 - Look at the raw data file
 
-* In RStudio, view the raw data.
-    1. go the the **Files** tab (lower right)
-    2. Navigate to the directory where you saved the file 
-    3. click on the file to view
+* In RStudio, view the raw data. 
+    1. go the the **Files** tab (lower right) 
+    2. Navigate to the directory where you saved the file  
+    3. click on the file to view 
 
-* Notice: the dot "." indicates missing values
+* Notice: the dot "." indicates missing values 
 
 ### Step 3 - Read the raw data into R
 
-Use what we learned about the raw data to read it into R
-
 ```{r read_time_series_data file}
 # base R function
-hhnw <- read.csv("data/TNWBSHNO.csv", na.strings = ".")
+hhnw <- read.csv("data/TNWBSHNO.csv")
 ```
 
 ### Step 4 - Look at the raw data again (in R)
 
-* Browse the data frame in Rstudio -- use the object in the **Environment** 
-* Use R commands to print information about the data frame
+
+* Browse the data frame in Rstudio -- click on the object name  the object in the (Environment tab) 
+* Use R commands to print information about the data frame 
 
 ```{r look_at_time_series_1}
 # View data "structure""
@@ -193,10 +193,10 @@ tail(hhnw)
 From these commands we know a little bit about how the data
 
 * Variable names 
-* Number of observations
+* Number of observations 
 * Data types 
-* The first few values
-* There are missing values
+* The first few values 
+* There are missing values, indicated by the dot "." 
 
 ### Step 5 - Data Cleaning
 
@@ -207,14 +207,14 @@ Problems
     a. are in all caps 
     b. variable names are not very informative 
 3. The variable "DATE" is stored as character data.  
-4. We have missing values
+4. We have missing values 
 
 Fixes
 
 1. Use options in read.csv 
 2. rename variables 
 3. Convert the Date variable from character type a date type. 
-4. Ignore for now. What to do about missing values depends on the research question.
+4. Use read.csv options to identify missing values. 
 
 ```{r convert_strings_to_dat es}
 # start over
@@ -254,15 +254,16 @@ summary(hhnw_post_crisis)
 ```
 
 Answer questions about the data
-* what is the maximum value, and when did it occur?
-* what is the minimum value, and when did it occur?
-* compare the period before and after the crisis
-    a. max values
-    b. min values
-    c. interquartile range
-    d. trend
-    e. mean
-    f. standard deviation
+
+* what is the maximum value, and when did it occur? 
+* what is the minimum value, and when did it occur? 
+* compare the period before and after the crisis 
+    a. max values 
+    b. min values 
+    c. interquartile range 
+    d. trend 
+    e. mean 
+    f. standard deviation 
 
 ```{r answer_time_series_qs}
 #...
@@ -278,7 +279,7 @@ Answer questions about the data
 
 ```{r plot_time_series}
 # Visualize every observation with a line plot
-plot(hhnw$date, hhnw$level, type = "l")
+plot(hhnw$date, hhnw$level, type = "l") 
 
 # viualize distribution with histogram
 hist(hhnw$level)
