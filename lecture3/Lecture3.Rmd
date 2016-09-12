@@ -64,11 +64,11 @@ The windows in the default layout can be broken down into two broad categories, 
 
 Subset objects by indexing: "[", "[[", or "$" -- mnemonics:
 
-* "x[7]", equivalent to $x_{7}$, "7***th*** element from vector x"
-* "X[4,5]", equivalent to $X_{4,5}$, "4***th*** row, 5***th*** column from matrix X"
-* "student[[GPA]]", equivalent to the "GPA ***of*** student"
-* "student[[3]]", equivalent to the "3rd part ***of*** student"
-* "student$GPA", equivalent to "student***'s*** GPA" 
+* "x[7]", equivalent to $x_{7}$, "7th element from vector x"
+* "X[4,5]", equivalent to $X_{4,5}$, "4th row, 5th column from matrix X"
+* "student[[GPA]]", equivalent to the "GPA of student"
+* "student[[3]]", equivalent to the "3rd part of student"
+* "student$GPA", equivalent to "student's GPA" 
 
 Do things with objects using functions
 
@@ -110,7 +110,7 @@ Do things with objects using functions
           * open the file, then press **Ctrl+Shift+Enter** 
           * open the file, then press the **Source** button 
      c. Batch Mode (outside of RStudio) 
-          * go to system command prompt, then execute the command: **R CMD BATCH filename.R** 
+          * go to system command prompt, then execute the command: **R CMD BATCH file-name.R** 
 
 4. Markdown documents (e.g., lecture2.Rmd) open the file and press the **Knit HTML** button. 
 
@@ -135,13 +135,22 @@ Do things with objects using functions
     
 * Customize Appearance: go to **Tools** menu, then select **Global Options**, then choose **Appearance** (the paint bucket icon).  From there you can choose a color theme for syntax highlighting and change the default font size. Other part of menu disable automatic quote matching, etc.
 
-* Set working directory
+* Set working directory (to location)
 
 ***
 
 ## Exploring Data 
 
-Data sets fall into 3 major catgories: time-series, cross-sectional, and panel or longitudinal.
+
+* A typical data analysis follows a predictable sequence of steps ![](images/data-science-explore.png) 
+
+image source [R for Data Science](http://r4ds.had.co.nz/)
+    
+* Data sets fall into 3 major categories:  
+    * *time series*
+    * *cross sectional*, and 
+    * *panel* (or longitudinal) data.
+
 
 
 ### Time series Data
@@ -150,41 +159,44 @@ A single measure observed at different points in time.
 
 "Most commonly, a ***time series*** is a sequence taken at successive equally spaced points in time. Thus it is a sequence of discrete-time data. Examples of time series are heights of ocean tides, counts of sunspots, and the daily closing value of the Dow Jones Industrial Average" ([Wikipedia, 2016-03-30](https://en.wikipedia.org/wiki/Time_series))
 
-Examples: Unemployment rate, GDP, my height
+For this lecture we will use [quarterly household net worth](http://www.federalreserve.gov/apps/fof/SeriesAnalyzer.aspx?s=FL152090005&t=B.101&suf=Q), a time series estimated and published quarterly by the Federal Reserve Board. 
 
-### Step 1 - Get raw data from the source
+![](images/hhnw_debt_growth_table.png)
 
-The St. Louis Fed provides thousands of time series to the public ([https://fred.stlouisfed.org/](https://fred.stlouisfed.org/)). 
+This table shows 6 time series, arranged in columns. Source: [Financial Accounts of the United States, June 2016](http://www.federalreserve.gov/releases/z1/current/)
 
-* Choose an example and download it as a csv file.  
-* Advanced option: use the quantmod package to download directly from R 
 
-```{r download_time_series}
-# install.packages(quantmod)
-# if ( !file.exists() ) download.file()
-```
 
-### Step 2 - Look at the raw data file
+
+### Step 1 - Get raw data (from the source)
+
+The St. Louis Fed provides thousands of time series to the public, with a very convenient interface called FRED ([https://fred.stlouisfed.org/](https://fred.stlouisfed.org/)). 
+
+* Download the csv file for quarterly household net worth to the local data directory
+
+
+### Step 2 - Look at the raw data file (in RStudio)
 
 * In RStudio, view the raw data. 
     1. go the the **Files** tab (lower right) 
     2. Navigate to the directory where you saved the file  
-    3. click on the file to view 
+    3. click on the file name to view in RStudio
 
 * Notice: the dot "." indicates missing values 
 
 ### Step 3 - Read the raw data into R
 
-```{r read_time_series_data file}
+```{r get_time_series_data1}
 # base R function
 hhnw <- read.csv("data/TNWBSHNO.csv")
 ```
-Now what?
+
 
 ### Step 4 - Look at the raw data again (in R)
 
-* Browse the data frame in Rstudio -- click on the object name (in the Environment tab) 
+* Browse the data frame in RStudio -- click on the object name (in the Environment tab) 
 * Use R commands to print information about the data frame 
+* Did we get the expected result? 
 
 ```{r look_at_time_series_1}
 # View data "structure""
@@ -195,12 +207,9 @@ head(hhnw)
 
 # And, print the last few rows of data
 tail(hhnw)
-
-# maybe even print 5 random rows of data
-hhnw[sample(1:nrow(hhnw), 5),]
 ```
 
-From these commands we know a little bit about how the data
+From these commands we can learn a little bit about the data
 
 * Variable names 
 * Number of observations 
@@ -212,18 +221,18 @@ From these commands we know a little bit about how the data
 
 Problems
 
- 
 1. We have missing values 
 2. Variable names:  (a) in all caps, (b) not very informative
 3. Default data types and units don't make sense 
 
 Fixes
 
-1. Use options to tell read.csv()
+1. Use options in read.csv() function call
 2. Rename variables 
-3. Transform the data
+3. Transform the data 
 
-```{r convert_strings_to_dates}
+
+```{r get_time_series_data2}
 # start over
 rm(hhnw)
 
@@ -239,19 +248,35 @@ hhnw$date <- as.Date(hhnw$date, format="%Y-%m-%d")
 # Convert millions to billions
 hhnw$level <- round(hhnw$level / 1000, digits = 1)
 
+# Exclude early observations 
+hhnw <- subset(hhnw, hhnw$date >= as.Date("1970-01-01"))
+
 # Look at the data
 str(hhnw)
 head(hhnw)
 tail(hhnw)
 ```
 
-Better?
 
-### Step 6 - Numeric summaries
 
-Introducing the base R functions 
+### Step 6 - Descriptive Statistics
 
-* summary()
+Introducing the base R function: summary()
+
+
+```{r summary_function1}
+# The easy way - tell me about this data frame
+summary(hhnw)
+```
+
+```{r summary_function2}
+# subset the data frame 
+# show a summary of household net worth's level measure (only)
+summary(hhnw$level)  
+```
+
+Summary statistics, a la carte 
+
 * min() 
 * max()
 * mean() 
@@ -260,18 +285,7 @@ Introducing the base R functions
 * quantile() 
 * median()
 
-```{r summary_function1}
-# The easy way - tell me about this data frame
-summary(hhnw)
-```
-
-```{r summary_function2}
-# summary of household net worth's level measure (only)
-summary(hhnw$level)  
-```
-
 ```{r ts_summary_functions}
-# DIY summary statistics
 mean(hhnw$level, na.rm=TRUE)
 max(hhnw$level, na.rm=TRUE)
 quantile(hhnw$level, na.rm=TRUE)
@@ -280,26 +294,7 @@ sd(hhnw$level, na.rm=TRUE)
 ```
 
 
-Data manipulation 
-
-* subset()
-* merge()
-
-
-```{r summary_on_subset}
-# Create subsets of the data frame 
-pre_crisis <- subset(hhnw, hhnw$date < as.Date("2007-06-01"))
-
-summary(pre_crisis)
-
-post_crisis <- subset(hhnw, hhnw$date >= as.Date("2007-06-01"))
-
-summary(post_crisis)
-```
-
-
-
-### Step 6 - Visual presentation
+### Step 7 - Visualization
 
 * Line graph  
 * Histogram 
@@ -307,40 +302,47 @@ summary(post_crisis)
 
 ```{r plot_time_series}
 # Visualize every observation in the time series with a line plot
-plot(hhnw$date, hhnw$level, type = "l") 
+plot(hhnw$date, hhnw$level, type = "l", main = "Quarterly Household Net Worth") 
 
-# viualize distribution with histogram
-hist(hhnw$level)
+# Visualize distribution with histogram
+hist(hhnw$level, main = "Quarterly Household Net Worth")
 
 # visualize distribution with boxplot
-boxplot(hhnw$level)
-
-# compare subsets with side-by-sde plots
-boxplot(pre_crisis$level, main = "Pre Crisis")
-boxplot(post_crisis$level, main = "Post Crisis")
+boxplot(hhnw$level, main = "Quarterly Household Net Worth")
 ```
 
-* advanced option:
+Compare subsets
+```{r summary_on_subset}
+# Create subsets of the data frame 
+pre_crisis  <- subset(hhnw, hhnw$date <  as.Date("2007-06-01"))
+post_crisis <- subset(hhnw, hhnw$date >= as.Date("2007-06-01"))
 
-```{r plot_time_series2}
-# compare subsets with side-by-sde plots
+# Descriptive statistics
+summary(pre_crisis)
+summary(post_crisis)
+
+quantile(pre_crisis$level)
+quantile(post_crisis$level)
+
+
+# side-by-sde plots
 par(mfrow=c(1,2))
 boxplot(pre_crisis$level, main = "Pre Crisis")
 boxplot(post_crisis$level, main = "Post Crisis")
 ```
 
-* Good enough? We can do better.  
-* Clear workspace.
+* Can we do better? 
+* What can we improve?
 
-### More Data Cleaning
+### More Data Cleaning - this is an iterative process
 
-Addtional problems
+Additional problems
 
-1. limited information from single time series
-    a. the level measure only: no flows, growth rates, etc.
-    b. important dates are not clearly marked  
-2. creating a new data frame for every subset can be unweildy  
-3. Shortcut for readable dates would be nice 
+1. we have limited information with a single time series
+    a. level measure only: no flows, growth rates, etc.
+    b. important dates are not explicitly marked  
+2. Creating a new data frame for every subset is not sustainable  
+3. Readable dates would be nice 
 
 Fixes
 
@@ -352,8 +354,8 @@ Fixes
 
 First, get more data. Download recession data from [FRED](https://fred.stlouisfed.org/release?rid=242)): [NBER based Recession Indicators for the United States from the Period following the Peak through the Trough](https://fred.stlouisfed.org/series/USRECQ)
 
-We will also need a function to compute lags in a data frame. A brief digression:
 
+We will need a convenient way to compute lags in a data frame. The built in lag() function does not work on generic data objects.
 ```{r define_shift}
 # R functions are objects that contain instructions
 
@@ -366,14 +368,13 @@ next_value <- function(x, k=1) {
     x <- c(tail(x, -k), rep(NA, k))
     return(x)
 }
+```
 
+```{r test_lag_function, eval=FALSE, include=TRUE}
 # Test with simple sequece
 foo <- 1:10
-
 prior_value(foo) # lag
-
 next_value(foo) # lead
-
 foo - prior_value(foo) # compute change
 ```
 
@@ -381,32 +382,49 @@ foo - prior_value(foo) # compute change
 Rebuild our data set with the new components
 
 ```{r remake_ts_dataframe}
+# Start fresh
+rm(hhnw, pre_crisis, post_crisis, foo)
 
-# Read the raw file
+#---- Get Raw Data ----#
+
 hhnw <- read.csv("data/TNWBSHNO.csv", na.strings=".", stringsAsFactors = FALSE)
 
-# Change names
+
+#---- Clean up raw data ----#
+
+# set names
 names(hhnw) <- c("date", "level")
 
 # Convert the character type into a date type
 hhnw$date <- as.Date(hhnw$date, format="%Y-%m-%d")
 
-# Create a simple time index
-hhnw$t <- seq(1, nrow(hhnw))
-
-# Label quarters
-hhnw$q <- ceiling(as.integer(format(hhnw$date, "%m")) / 3)
-
-hhnw$quarter <- paste(format(hhnw$date, "%Y"), hhnw$q, sep=":Q")
-
-# Convert millions to billions
+# convert millions to billions
 hhnw$level <- round(hhnw$level / 1000, digits = 1)
+
+
+#---- Compute new series ----#
 
 # compute the flow (change in level)
 hhnw$flow <- hhnw$level - prior_value(hhnw$level)
 
 # compute the growth rate (one quarter trend)
 hhnw$growth <- 100 * ( hhnw$flow ) / prior_value(hhnw$level) 
+
+
+#---- Add categorical labels etc. ----#
+
+# Label quarters
+hhnw$year <- as.integer(format(hhnw$date, "%Y"))
+  
+hhnw$q <- ceiling(as.integer(format(hhnw$date, "%m")) / 3)
+
+hhnw$quarter <- paste(hhnw$year, hhnw$q, sep=":Q")
+
+#----  Exclude early observations 
+hhnw <- subset(hhnw, hhnw$date >= as.Date("1970-01-01"))
+
+# create a simple index for time
+hhnw$t <- seq(1, nrow(hhnw))
 ```
 
 Merge in recession indicator
@@ -426,40 +444,66 @@ hhnw$recession <- ifelse(is.na(hhnw$recession), 0, hhnw$recession)
 str(hhnw)
 head(hhnw)
 tail(hhnw)
+
+
+# maybe even print 5 random rows of data
+set.seed(20160916)
+hhnw[sort(sample(1:nrow(hhnw), 5)),]
 ```
 
-```{r replot_ts}
-plot(hhnw$date, hhnw$level, main = "Household Net Worth, Level")
-plot(hhnw$date, hhnw$flow, main = "Household Net Worth, Flow")
-plot(hhnw$date, hhnw$growth, main = "Household Net Worth, Growth Rate")
+```{r replot_ts_lines}
+plot(hhnw$date, hhnw$level, type="l", main = "Household Net Worth, Level")
+plot(hhnw$date, hhnw$flow, type="l", main = "Household Net Worth, Flow")
+plot(hhnw$date, hhnw$growth, type="l", main = "Household Net Worth, Growth Rate")
+```
 
-plot(hhnw$q, hhnw$flow, main="Household Net Worth: Flows by Quarter")
-
-
+```{r replot_ts_boxplot}
 par(mfrow=c(1,2))
 boxplot(hhnw[ hhnw$recession==1,  "level"], main = "Household Net Worth: Growth Rate During Recessions")
 
 boxplot(hhnw[ hhnw$recession==0,  "level"], main = "Household Net Worth: Growth Rate During Expansions")
+```
 
+Signs of serial correlation in the flow?
+```{r plot_ts_scatterplot}
+plot(prior_value(hhnw$flow), hhnw$flow, main = "Household Net Worth\nFlow at time (t-1) vs Flow at time (t)")
 ```
 
 
-#### Exercises: Answer specific questions about the data
-
-* what is the all time high, when did it occur? 
-* what was the previous high, and when did it occur? 
-* compare the period before and after the crisis 
-    a. max values 
-    b. min values 
-    c. interquartile range 
-    d. trend 
-    e. mean 
-    f. standard deviation 
-
-```{r answer_time_series_qs}
-#...
+Here's how to save plots to a file
+```{r save_ts_plot, eval=FALSE, include=TRUE}
+png("images/Lecture3_plot.png", width = 600, height = 400)
+plot(hhnw$date, hhnw$level, type="l", main = "Household Net Worth, Level")
+dev.off()
 ```
-     
+
+
+#### Homework Exercises
+
+1. Choose a raw time series from FRED, and download it as a csv file.  
+    * Advanced option: use the quantmod package to download FRED data directly from R (not required)
+2. Read the data using R, and do at least 3-5 data transformations. For example:
+    * change the units
+    * rename variables
+    * merge in additional series 
+    * compute a new series (rate of return, % change, categorical label, etc.) 
+    * adjust for inflation 
+3. Subset the data, filter for a specific period of time 
+4. Do at least one plot (line plot, histogram, boxplot, or scatterplot) 
+5. Compute summary statistics 
+    * Number of observations 
+    * min and max
+    * mean 
+    * median 
+    * interquartile range 
+    * standard deviation 
+6. Address the following questions about the time series
+    * Name and describe the series
+    * Provide link to raw data from FRED
+    * Briefly describe the data transformations (in code comments)
+    * Describe major patterns: shape of distribution, time trend, seasonality, changes in volatility, extreme values, etc.
+    
+***
 
 ### Cross Sectional Data
 
@@ -467,7 +511,7 @@ A single measure (or set of measures) observed from multiple entities at the sam
 
 "Cross-sectional data, or a cross section of a study population, in statistics and econometrics is a type of data collected by observing many subjects (such as individuals, firms, countries, or regions) at the same point of time, or without regard to differences in time. Analysis of cross-sectional data usually consists of comparing the differences among the subjects." ([Wikipedia, 2016-03-30](https://en.wikipedia.org/wiki/Cross-sectional_data))
 
-Examples: student GPAs, 
+***
 
 ### Panel Data
 
@@ -475,23 +519,17 @@ Cross sectional data from multiple points in time
 
 "In statistics and econometrics, the term panel data refers to multi-dimensional data frequently involving measurements over time. Panel data contain observations of multiple phenomena obtained over multiple time periods for the same firms or individuals. In biostatistics, the term longitudinal data is often used instead, wherein a subject or cluster constitutes a panel member or individual in a longitudinal study. Time series and cross-sectional data can be thought of as special cases of panel data that are in one dimension only (one panel member or individual for the former, one time point for the latter)." ([Wikipedia, 2016-03-30](https://en.wikipedia.org/wiki/Panel_data))
 
-* PSID, US Census, ...
-
+* [Panel Study of Income Dynamics](http://psidonline.isr.umich.edu/), [National Longitudinal Surveys](http://www.bls.gov/nls/)
 
 
 ***
 
 ## Resources
 
-https://www.rstudio.com/online-learning/#R
+[http://tryr.codeschool.com/](http://tryr.codeschool.com/)
 
-http://tryr.codeschool.com/
+[https://www.rstudio.com/online-learning/#R](https://www.rstudio.com/online-learning/#R)
 
-https://github.com/DataScienceSpecialization/courses/tree/master/04_ExploratoryAnalysis
+[http://adv-r.had.co.nz/](http://adv-r.had.co.nz/)
 
-http://r4ds.had.co.nz/
-
-https://github.com/hadley/r4ds
-
-
-"R is a language, spoken to computers and other programmers"
+[https://github.com/hadley/r4ds](https://github.com/hadley/r4ds)
