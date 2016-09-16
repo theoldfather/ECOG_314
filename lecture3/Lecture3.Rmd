@@ -12,9 +12,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Welcome & Setup
 
 1. Log in to network 
-2. Update course materials from github 
-3. Open lecture file
-4. Set working directory
+2. Update course materials from github
+    * https://github.com/wampeh1/ECOG_314
+3. Open lecture file in RStudio
+    * Lecture3.Rmd
 
 ***
 
@@ -23,13 +24,10 @@ knitr::opts_chunk$set(echo = TRUE)
 * Instructions
 
 ***
-## Homework Feedback
+## Homework 
 
-* Difficulty 
-* Success 
-* It's not too late 
-* Help is available 
-* It's worth it 
+* Feedback
+* Next Homework
 
 ***
 
@@ -71,30 +69,30 @@ Four panels and a menu: each part of the interface serves a purpose
     * go to the Environment tab >> click on the blue disk icon 
     * go the Session menu >> select Save Workspace As
     * use the save() function 
-    * *Why? Keep your work without having to recompute*
+    * Why? *Keep your work without having to recompute*
     
 * **Clear workspace**: remove objects from memory 
     * go to the Environment tab >> click on the yellow broom icon 
-    * go the Session menu >> select Load Workspace 
+    * go the Session menu >> select Clear Workspace 
     * use the ls() and rm() functions  
-    * *Why? Keep your work from each session separate*
+    * Why? *Keep your work from each session separate*
 
 * **Reload saved workspace**, or read objects that were saved to a file 
     * go to the Environment tab >> click on the yellow & green folder icon 
     * go the Session menu >> select Load Workspace
     * use the load() function 
-    * *Why? Restore your work from a prior session without having to recompute*
+    * Why? *Restore your work from a prior session without having to recompute*
     
 * **Customize Appearance**: go to Tools menu >> select Global Options >> choose Appearance (the paint bucket icon).  
     * choose a color theme for syntax highlighting and 
     * change the default font size.  
-    * *Why? Make it easier to see what you are doing and catch mistakes*
+    * Why? *Make it easier to see what you are doing and catch mistakes*
     
 
 * **Background R session** 
     * Set working directory (to location): go to the Session menu >> Set working directory >> choose as appropriate
     * Restart R: go to the Session menu >> choose Restart R
-    * *Why? Same reason you would clear your workspace*
+    * Why? *Same reason you would clear your workspace*
     
 All of these things help you work more efficiently and more effectively, which is what RStudio is meant to do.
 
@@ -119,17 +117,13 @@ RStudio interface
 ### R Object types
 
 * Vectors: one dimension, one type 
-    * Why?
 * Lists: one dimension, many types 
-    * Good for what?
 * Matrices: two dimensions, one type 
-    * Advantage?
 * Data Frames: two dimensions, many types 
-    * Primary application?
 
 ### R syntax
 
-Everything is an object or a function, unless it's an environment  ([what's an environment?](https://www.r-bloggers.com/what-is-an-r-environment/)) 
+Everything is an object or a function, unless it's an environment  ([what's an environment?](https://www.r-bloggers.com/what-is-an-r-environment/)). Some key concepts: 
 
 * Object
     * a data structure that stores information
@@ -202,28 +196,47 @@ A **matrix** is a rectangular grid of data with specific dimensions. Optional: r
 
 ### R Syntax Examples - Object subsetting
 
+Example objects
+
+```{r example_objects}
+
+x <- letters[1:10]
+X <- matrix(1:25, nrow = 5, ncol = 5)
+df <- data.frame(letter = letters[1:10], number = 1:10)
+student <- list(name = "Damian", GPA = 3.0, major = "Sociology")
+
+```
+
+
 #### The Bracket: [
 
 Retrieve the ***i-th*** element in an object
+
 ```{r syntax_example1, eval=FALSE, include=TRUE}
+
 x[7]             # 7th element from vector x  
 X[4,5]           # 4th row, 5th column from matrix X
 df[c(6,7,9), ]   # 6th, 7th, and 9th row of data frame, and all columns
+
 ```
 
 #### The Double Bracket: [[
 
 Retrieve part ***of*** a list object or data frame
 ```{r syntax_example2, eval=FALSE, include=TRUE}
+
 student[[3]]       # 3rd part of student
 student[["GPA"]]   # GPA of student
 
 ```
 
 #### The Dollar: $
+
 Retrieve an object***'s*** component (named list object or data frame column)
 ```{r syntax_example3, eval=FALSE, include=TRUE}
+
 student$GPA      # student's GPA 
+
 ```
 
 #### The Paren: (
@@ -231,9 +244,9 @@ student$GPA      # student's GPA
 Evaluates an expression or function (loosely speaking)
 
 ```{r use_parens}
-(1 + 2) ^ 3 
-1 + 2 ^ 3
-sum(1, 2) ^ 3
+1 + 2 ^ 3      # normal 
+(1 + 2) ^ 3    # evaluate addition first
+sum(1, 2) ^ 3  # evaluate sum first
 ```
 
 #### The Brace: {
@@ -244,9 +257,8 @@ Encapsulates one or more expressions, i.e., a "block of code" (again, loosely sp
 
 sum(avengers$movies) + 1   # expression without braces
 
-{ 
- sum(avengers$movies) + 1  # expression in braces
-}
+{ sum(avengers$movies) + 1  } # expression in braces, same thing
+
 
 
 { 
@@ -263,6 +275,7 @@ sum(avengers$movies) + 1   # expression without braces
 
 Do things with objects using functions, here's how to define one
 ```{r syntax_example4, eval=FALSE, include=TRUE}
+
 boost <- function(x, percent) {
     y <- (1 + percent/100) * x
     return(y)
@@ -276,8 +289,10 @@ student$GPA * 1.1                   # same thing, but not as informative to the 
 
 \*Everything\* is function or an object, even operators
 ```{r syntax_example5, eval=FALSE, include=TRUE}
+
 "+"(1, 1)           # returns 2
 help("+")           # show help for "+" just like any other function
+
 ```
 
 
@@ -291,25 +306,55 @@ help("+")           # show help for "+" just like any other function
     
 * Specialized formats (Excel, stata, unstructured, etc.)
     * convert to text files (export or save-as) 
-    * use packages 
+    * use packages. Refer to refer to helpful sites below
     
-### Getting help
+```{r quick_examples, eval=FALSE, include=TRUE}
 
-Not sure how to do it? Not working as expected? It is *extremely* likely that someone else has encountered the same issue, found a solution, and posted it somewhere. Take advantage. It's not plagiarism--it's [open source](https://en.wikipedia.org/wiki/Open-source_software). Helpful resources: 
+# Using base R #
 
-* [http://www.cookbook-r.com/](http://www.cookbook-r.com/Data_input_and_output/Loading_data_from_a_file/) - recipes for common tasks
-* [http://www.datacamp.com/](https://www.datacamp.com/community/tutorials/importing-data-r-part-two) - examples and tutorials
-* [http://stackoverflow.com/](http://stackoverflow.com/questions/tagged/r) - searchable Q&A 
-* [http://www.r-bloggers.com/](https://www.r-bloggers.com/read-excel-files-from-r/) - brief posts with examples, links to other sites
-* [google](http://www.google.com) - is your friend
-    
+csv1 <- read.csv("https://github.com/wampeh1/ECOG_314/raw/master/lecture2/data/aat1.csv")
 
-    
+tsv1 <- read.table("https://github.com/wampeh1/ECOG_314/raw/master/lecture2/data/unemp.tsv", sep = "\t")
+
+# Using readr #
+
+library(readr)
+csv2 <- read_csv("https://github.com/wampeh1/ECOG_314/raw/master/lecture2/data/aat1.csv")
+
+tsv2 <- read_tsv("https://github.com/wampeh1/ECOG_314/raw/master/lecture2/data/unemp.tsv")
+
+# Import Excel  #
+
+library(xlsx)
+df <- read.xlsx("myxlsfile", sheetIndex = 1) 
+
+# Import Excel (2) #
+
+library(XLConnect)
+wb <- loadWorkbook("myxlsfile") 
+df <- readWorksheet(wb, sheet=1)
+
+```
+
+
 ### Viewing Data
 
 * Environment tab: click on the object name
 * print() function: type the object name at command prompt and press enter 
 * RStudio file browser 
+* write data to a file, *see write.csv()*
+
+
+### Getting help
+
+Not sure how to do it? Not working as expected? It is *extremely* likely that someone else has encountered the same issue, found a solution, and posted it somewhere. Take advantage. It's not plagiarism--it's [open source](https://en.wikipedia.org/wiki/Open-source_software). Helpful resources: 
+
+* Cookbook R: [http://www.cookbook-r.com/Data_input_and_output/Loading_data_from_a_file/](http://www.cookbook-r.com/Data_input_and_output/Loading_data_from_a_file/) - recipes for common tasks
+* Datacamp Tutorials: [https://www.datacamp.com/community/tutorials/importing-data-r-part-two](https://www.datacamp.com/community/tutorials/importing-data-r-part-two) 
+* Stack Overflow: [http://stackoverflow.com/questions/tagged/r](http://stackoverflow.com/questions/tagged/r) - searchable Q&A 
+* R Bloggers: [https://www.r-bloggers.com/read-excel-files-from-r/](https://www.r-bloggers.com/read-excel-files-from-r/) - brief posts with examples, links to other sites
+* [google](http://www.google.com) - is your friend
+
 
 ### Running Code 
 
@@ -457,39 +502,63 @@ There is an entire academic paper about tidy data principles (http://vita.had.co
 
 ### Cross Section Example 1
 
-The avengers data frame is already tidy so we are ready to explore. 
+The avengers data frame is already tidy.
 
 ```{r show_avengers_df_again}
 avengers
+str(avengers)
 ```
 
+#### Transform
+
+But lets make sure the data types make sense. 
+
+```{r }
+avengers$character <- as.character(avengers$character)
+```
 
 #### Visualize 
 
 ```{r avengers_plot_by_character}
-barplot(avengers$movies, names.arg = avengers$character, main = "Number of Movies per Character")
+
+library(ggplot2)
+
+ggplot(avengers, aes(x = character, y = movies)) +
+    geom_bar(stat = "identity") + 
+    ggtitle("Number of Movies per Character")
+
 ```
 
+
 ```{r avengers_plot_distribution1}
-hist(avengers$movies, main = "Distribution of Number of Movies per Character")
+
+ggplot(avengers, aes(x = movies)) +
+    geom_histogram( binwidth = 1 ) +    # change the binwidth...
+    ggtitle("Distribution of Number of Movies per Character")
+
 ```
 
 ```{r avengers_plot_distribution2}
-boxplot(avengers$movies, main = "Distribution of Number of Movies per Character")
+
+ggplot(avengers, aes(x = "", y = movies)) +
+    geom_boxplot() +
+    ggtitle("Distribution of Number of Movies per Character")
+
 ```
 
 
 #### Model
 
-* Compute summary statistics, a very generic "model"
+* Compute summary statistics
 ```{r }
+nrow(avengers)
 summary(avengers$movies)
 sd(avengers$movies) 
 ```
 
 #### Questions
 
-* How many movies have been made?
+* How many movies have been made?  
 * Average number of movies?
 * Who has the most movies?
 
@@ -522,7 +591,7 @@ tail( avengers[ order(avengers$movies),], 3)
 
 Start another iteration.
 
-This number of movies by itself is not conclusive. Lets add more information about the movies. Again, from Wikipedia: https://en.wikipedia.org/wiki/List_of_Marvel_Cinematic_Universe_films#Box_office_performance
+This number of movies by itself is not conclusive. Lets get more information about the movies. Again, from Wikipedia: https://en.wikipedia.org/wiki/List_of_Marvel_Cinematic_Universe_films#Box_office_performance
 
 ```{r avenger_movie_info, echo = TRUE}
 movies <- data.frame(title = c("Iron Man", 
@@ -572,10 +641,16 @@ movies
 str(movies)
 ```
 
-#### Tidy (movies)
+#### Tidy  (movies)
+
+Looks pretty good.
+
+#### Transform (movies)
+
+Before we can plot anything or compute summary statistics
 
 * Convert factors to characters (so we can manipulate the text)
-* Convert revenues to numeric values
+* Convert revenues to numeric values, change units
 * Capture the dates
 
 ```{r tidy_movies}
@@ -595,25 +670,51 @@ str(movies)
 #### Visualize (movies)
 
 ```{r movie_revenue_plots}
-barplot(movies$revenue, names.arg = movies$title, main = "Movie Revenue", xlab = "Movie Title", ylab = "$ Millions")
+# bar plot
+ggplot(movies, aes(x = title, y = revenue)) +
+    geom_bar(stat = "identity") + 
+    ggtitle("Movie Revenue") +
+    xlab("Movie Title") + ylab("$ Millions") +
+    theme(axis.text.x  = element_text(angle=90, vjust=0.5, hjust = 1, size=12)) 
 
+# horizontal bar plot
+ggplot(movies, aes(x = title, y = revenue)) +
+    geom_bar(stat = "identity") + 
+    ggtitle("Movie Revenue") +
+    xlab("Movie Title") + ylab("$ Millions") +
+    coord_flip()
 
-movies <- movies[ order(movies$revenue), ] # sort by revenue
-barplot(movies$revenue, names.arg = movies$title, main = "Movie Revenue")
+# sorted horizontal bar plot
+ggplot(movies, aes(x = reorder(title, -revenue), y = revenue)) +
+    geom_bar(stat = "identity") + 
+    ggtitle("Movie Revenue") +
+    xlab("Movie Title") + ylab("$ Millions") +
+    theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=16)) +
+    coord_flip()
 
+# line plot
+ggplot(movies, aes(x = released, y = revenue)) +
+    geom_line() +
+    ggtitle("Movie Revenue") +
+    xlab("Release Date") + ylab("$ Millions")
 
-movies <- movies[ order(movies$released), ] # sort by release date
-plot(movies$released, movies$revenue, type="l", main = "Movie Revenue", xlab = "Release Date", ylab = "$ Millions")
-
-plot(movies$released, cumsum(movies$revenue), type="s", main = "Cumulative Movie Revenue", xlab = "Release Date", ylab = "$ Millions")
-
-hist(movies$revenue, main = "Distribution of Movie Revenue")
+# cumulative plot (step)
+ggplot(movies, aes(x = released, y = cumsum(revenue))) +
+    geom_step() +
+    ggtitle("Cumulative Movie Revenue") +
+    xlab("Release Date") + ylab("$ Millions") 
+    
+# histogram
+ggplot(movies, aes(x = revenue)) +
+    geom_histogram(binwidth=150) +
+    ggtitle("Distribution of Movie Revenue") 
 ```
 
 
 #### Model (movies)
 
 ```{r movie_revenue_summary_stats}
+nrow(movies)
 summary(movies$revenue)
 sd(movies$revenue)
 ```
@@ -643,20 +744,99 @@ sd(movies$revenue)
 
 
 
-#### Transform
+#### Transform -- create a variable with coding
 
-Lets combine the two data sets so we can answer the question.
+It's possible to tell who the hero is from the title. Here we want to use a simple rule to make a new variable. If the title has the name of an avenger in it, then that avenger must be the main character. Reasonable?
 
-merge(avengers, movies, by = "character", all = TRUE)
+Steps
 
-***
+* Define this rule in R
+* Add a column for character to the movies data frame
+
+
+Programming solution: Define a function to figure out the main character based on the title. Strategy
+
+Given a set of titles and a set of hero names as input:
+
+1. Search for hero name in every title
+2. where there is a match, update x with the hero name
+3. repeat for every hero name, updating x each time
+4. if no match, x remains NA
+5. Return x, a vector of with the (last) hero name found in each title
+
+Iterate using for(), check conditions using ifelse(), and search for text using grepl()
+    
+```{r create_hero_finder}
+
+find_hero <- function(title, heroes) { 
+    x <- rep(NA, length(title))
+    
+    for (i in 1:length(heroes)) {
+        x <- ifelse(grepl(heroes[i], title), heroes[i], x)
+    }
+  
+    return(x)
+}
+```
+
+Now, check if it works. The answer should be  c("Thor", NA)
+
+```{r }
+find_hero(c("Thor Ragnorok", "The Amazing Spiderman"),  
+          c("Thor", "Superman", "Wonder Woman"))
+```
+
+Put it to work -- create a new column of data in movies
+
+```{r add_character_to_movies}
+
+movies$character <- find_hero(movies$title, avengers$character)
+
+movies
+str(movies)
+```
+
+Manual Solution: create a character vector with the names of the heroes in the correct order, then assign it to a new column in the movies data frame. This manual approach can introduce mistakes,
+
+```{r hard_coded_data_column}
+movie_heroes <- c("Iron Man", "Hulk", "Iron Man", "Thor",
+                  "Captain America", NA, "Iron Man", "Thor",
+                  "Captain America", NA, NA, NA, 
+                  "Captain America")
+
+# movie$character <- movie_heroes
+
+```
+
+One way or the other, we have a transformed movies data frame that includes both revenue and character information. 
+
+#### Transform -- Aggregate with dplyr
+
+* Compute the total revenue for each character -- using what we have seen in previous lectures
+
+```{r aggregate}
+library(dplyr)
+
+earnings <- movies %>% 
+                group_by(character) %>%
+                summarise(revenue = sum(revenue)) %>%
+                data.frame()
+
+earnings
+str(earnings)
+```
+
+
+*** 
 
 
 ### Time series Data
 
 A single measure, or set of measures, observed at different points in time. 
 
-"Most commonly, a ***time series*** is a sequence taken at successive equally spaced points in time. Thus it is a sequence of discrete-time data. Examples of time series are heights of ocean tides, counts of sunspots, and the daily closing value of the Dow Jones Industrial Average" ([Wikipedia, 2016-03-30](https://en.wikipedia.org/wiki/Time_series))
+> "Most commonly, a ***time series*** is a sequence taken at successive equally spaced points in time. Thus it is a sequence of discrete-time data. Examples of time series are heights of ocean tides, counts of sunspots, and the daily closing value of the Dow Jones Industrial Average" 
+
+*- Source [Wikipedia, 2016-09-15](https://en.wikipedia.org/wiki/Time_series)*
 
 ### Time Series Example 1
 
@@ -1337,28 +1517,22 @@ dev.off()
 
 #### Homework Exercises
 
-1. Choose a raw time series from FRED, and download it as a csv file.  
-    * Advanced option: use the quantmod package to download FRED data directly from R (not required)
-2. Read the data using R, and do at least 3-5 data transformations. For example:
+1. Choose a raw data set, and download it.  
+    * Advanced option: use R to download the file (not required)
+2. Import the data using R, and do  3-5 data transformations. For example:
     * change the units
     * rename variables
-    * merge in additional series 
-    * compute a new series (rate of return, % change, categorical label, etc.) 
+    * merge in additional variables/series 
+    * compute at least one new series ( categorical label, etc.) 
     * adjust for inflation 
-3. Subset the data, filter for a specific period of time 
+3. Subset or sample the data if it is relevant, explain why
 4. Do at least one plot (line plot, histogram, boxplot, or scatterplot) 
 5. Compute summary statistics 
-    * Number of observations 
-    * min and max
-    * mean 
-    * median 
-    * interquartile range 
-    * standard deviation 
-6. Address the following questions about the time series
-    * Name and describe the series
-    * Provide link to raw data from FRED
-    * Briefly describe the data transformations (in code comments)
-    * Describe major patterns: shape of distribution, time trend, seasonality, changes in volatility, extreme values, etc.
+6. Address the following questions 
+    * Categorize the data set (e.g., panel data), describe it
+    * Provide link to the source
+    * Briefly describe the data transformations (in code comments or rmarkdown text)
+    * Describe major patterns (or lack thereof). E.g.: shape of distribution, time trend, seasonality, changes in volatility, extreme values, etc.
     
 ***
 
@@ -1366,11 +1540,40 @@ dev.off()
 
 Cross sectional data from multiple points in time
 
-"In statistics and econometrics, the term panel data refers to multi-dimensional data frequently involving measurements over time. Panel data contain observations of multiple phenomena obtained over multiple time periods for the same firms or individuals. In biostatistics, the term longitudinal data is often used instead, wherein a subject or cluster constitutes a panel member or individual in a longitudinal study. Time series and cross-sectional data can be thought of as special cases of panel data that are in one dimension only (one panel member or individual for the former, one time point for the latter)." ([Wikipedia, 2016-03-30](https://en.wikipedia.org/wiki/Panel_data))
+> "In statistics and econometrics, the term panel data refers to multi-dimensional data frequently involving measurements over time. Panel data contain observations of multiple phenomena obtained over multiple time periods for the same firms or individuals. In biostatistics, the term longitudinal data is often used instead, wherein a subject or cluster constitutes a panel member or individual in a longitudinal study. Time series and cross-sectional data can be thought of as special cases of panel data that are in one dimension only (one panel member or individual for the former, one time point for the latter)."
+
+* - Source: [Wikipedia, 2016-03-30](https://en.wikipedia.org/wiki/Panel_data)*
 
 * [Panel Study of Income Dynamics](http://psidonline.isr.umich.edu/), [National Longitudinal Surveys](http://www.bls.gov/nls/)
 
+***
 
+
+## Homework Exercises
+
+Explore a dataset
+
+1. Choose a raw data set, and download it.
+    * Advanced option: use R to download the file (not required)
+2. Import the data into R
+3. Do at least 3 data transformations, Explain your reasoning. For example:
+    * change the units 
+    * rename variables
+    * merge in additional variables 
+    * compute a new variable ( categorical label, etc.) 
+    * aggregate
+    * subset or sample 
+4. Do at least one plot
+5. Compute summary statistics 
+6. Address the following questions 
+    * Categorize the data set (e.g., panel data), describe it
+    * Provide link to the source
+    * Describe most intersting patterns (or lack thereof). E.g.: shape of distribution, time trend, seasonality, changes in volatility, extreme values, etc.
+    * Offer a future question to investigate or a next step to take
+8. Turn in your results as either
+    * an r script (.R or .r file, with text answers as code comments )
+    * an r markdown document (.Rmd or .rmd file)
+9. Bonus: include links to websites or documentation used to figure things out. Indicate what you used each for as briefly as possible. 
 ***
 
 ## Resources
