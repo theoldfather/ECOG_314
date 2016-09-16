@@ -1,6 +1,6 @@
 ---
 title: "ECOG314 -- Suggested project guidelines -- Supplementary Notes on Data analysis in R"
-filename: "lecture3_project_guide_multivariate_data_analysis.rmd"
+filename: "lecture3_data_analysis.rmd"
 author: "William Ampeh"
 date: "September 12, 2016"
 output: 
